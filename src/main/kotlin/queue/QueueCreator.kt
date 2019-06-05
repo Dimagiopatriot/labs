@@ -5,11 +5,11 @@ import system.MyAlgo3
 import java.util.*
 
 interface QueueCreator {
-    fun createQueue(sourceData: ReformattedData): List<Int>
+    fun createQueue(sourceData: ReformattedData, shouldReturnCriticalPathValues: Boolean = false): List<Int>
 }
 
 object Algo12 : QueueCreator {
-    override fun createQueue(sourceData: ReformattedData): List<Int> {
+    override fun createQueue(sourceData: ReformattedData, shouldReturnCriticalPathValues: Boolean): List<Int> {
         /*val commonLinksMatrix = Array(sourceData.linksMatrix.size) { IntArray(sourceData.linksMatrix.size) }
 
         for (i in 0 until commonLinksMatrix.size) {

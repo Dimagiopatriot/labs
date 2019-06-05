@@ -3,19 +3,19 @@ package system
 import ReformattedData
 import queue.QueueCreator
 
-object MyAlgo3: QueueCreator {
+object MyAlgo3 : QueueCreator {
     //алгоритм такий - ми беремо найнижчі вершини, проходячи вверх, записуємо в список наступні зі значенями їх ваг + ваги попередньої
     // якщо записана вага існує вже в списку, але менша, ніж вага даної вершини в списку на даний момент, то перезаписуємо. Інакше,
     // лишаємо без змін
     private val criticalPaths = mutableSetOf<Pair<Int, Int>>()
 
-    override fun createQueue(sourceData: ReformattedData): List<Int> {
+    override fun createQueue(sourceData: ReformattedData, shouldReturnCriticalPathValues: Boolean): List<Int> {
         criticalPaths.clear()
 
         val endVertexes =
-            sourceData.linksMatrix.mapIndexed {index, ints -> index to ints }
+            sourceData.linksMatrix.mapIndexed { index, ints -> index to ints }
                 .filter { it.second.sum() == 0 }
-                .map {  sourceData.toRealId(it.first) }
+                .map { sourceData.toRealId(it.first) }
 
         endVertexes.forEach {
             criticalPaths.add(Pair(it, sourceData.matrixIdToValueMap.getValue(sourceData.toMatrixId(it))))
@@ -27,7 +27,10 @@ object MyAlgo3: QueueCreator {
             firstParent = findCriticalPaths(firstParent.toList(), sourceData)
         }
 
-        return criticalPaths.sortedByDescending { it.second }.map { it.first }
+        return if (!shouldReturnCriticalPathValues)
+            criticalPaths.sortedByDescending { it.second }.map { it.first }
+        else
+            criticalPaths.sortedByDescending { it.second }.map { it.second }
     }
 
     private fun findCriticalPaths(vertexes: List<Int>, sourceData: ReformattedData): Set<Int> {

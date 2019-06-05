@@ -13,12 +13,7 @@ class TasksTab(graph: mxGraph): CustomTab(graph) {
         val generateGraphButton = JButton("Generate graph").apply {
             addActionListener { GenerateGraphDialog(this@TasksTab, "Parameters", graph) }
         }
-
-        val generateStatisticButton = JButton("Generate statistic").apply {
-            addActionListener { GenerateStatisticDialog(this@TasksTab, "Parameters", graph) }
-        }
         toolsPanel.add(generateGraphButton)
-        toolsPanel.add(generateStatisticButton)
     }
 
     override fun willBeInvalidEdge(edge: mxCell) = checkForLoop(graphCells)

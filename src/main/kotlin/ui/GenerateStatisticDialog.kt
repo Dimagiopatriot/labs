@@ -1,11 +1,12 @@
 package ui
 
 import com.mxgraph.view.mxGraph
+import system.GenerateStatistic
 import java.awt.Component
 import java.awt.Point
 import javax.swing.*
 
-class GenerateStatisticDialog(private val invoker: Component, title: String, graph: mxGraph) :
+class GenerateStatisticDialog(private val invoker: Component, title: String, taskGraph: mxGraph, systemGraph: mxGraph) :
     JDialog(SwingUtilities.windowForComponent(invoker), title) {
 
     private val vertexStartCount = JTextField("8", 4)
@@ -76,7 +77,23 @@ class GenerateStatisticDialog(private val invoker: Component, title: String, gra
         add(staticVertexCountLine)
 
         val buttonsLine = JPanel()
-        val generateButton = JButton("Generate").apply { addActionListener {  } }
+        val generateButton = JButton("Generate").apply {
+            addActionListener {
+                val genStatistic = GenerateStatistic(
+                    vertexStartCount.text.toInt(),
+                    vertexStep.text.toInt(),
+                    startCorrelationField.text.toDouble(),
+                    endCorrelationField.text.toDouble(),
+                    correlationStep.text.toDouble(),
+                    minVertexWeight.text.toInt(),
+                    maxVertexWeight.text.toInt(),
+                    statisticVertexCount.text.toInt(),
+                    taskGraph,
+                    systemGraph
+                )
+                genStatistic.genStatistic()
+            }
+        }
         val cancelButton = JButton("Cancel").apply { addActionListener { isVisible = false; dispose() } }
         buttonsLine.add(generateButton)
         buttonsLine.add(cancelButton)

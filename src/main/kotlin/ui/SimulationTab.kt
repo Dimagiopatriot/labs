@@ -30,6 +30,11 @@ class SimulationTab(private val tasksGraph: mxGraph, private val systemGraph: mx
         val createQueueButton = JButton("Create queue")
         toolsPanel.add(createQueueButton)
 
+        val generateStatisticButton = JButton("Generate statistic").apply {
+            addActionListener { GenerateStatisticDialog(this@SimulationTab, "Parameters", tasksGraph, systemGraph) }
+        }
+        toolsPanel.add(generateStatisticButton)
+
         val thirdAlgoRB = JRadioButton("3").apply { actionCommand = text }
         val twelveAlgoRB = JRadioButton("12").apply { actionCommand = text }
         val queueSelector = ButtonGroup().apply {
