@@ -89,7 +89,8 @@ class GenerateStatisticDialog(private val invoker: Component, title: String, tas
                     maxVertexWeight.text.toInt(),
                     statisticVertexCount.text.toInt(),
                     taskGraph,
-                    systemGraph
+                    systemGraph,
+                    invoker
                 )
                 genStatistic.genStatistic()
             }

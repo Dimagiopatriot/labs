@@ -5,8 +5,11 @@ import com.mxgraph.view.mxGraph
 import queue.Algo12
 import reformattedData
 import system.schedule.Scheduler2
+import ui.ShowStatisticDialog
+import java.awt.Component
+import kotlin.math.round
 
-class CalculateStatistic(val systemGraph: mxGraph) {
+class CalculateStatistic(val systemGraph: mxGraph, val invoker: Component) {
 
     private val queueAlgos = mapOf(3 to MyAlgo3, 12 to Algo12)
 
@@ -23,33 +26,34 @@ class CalculateStatistic(val systemGraph: mxGraph) {
             val thirdAlgoAccelerateCoef = timeOnOneProcessor / thirdAlgoTime.toDouble()
             val twelveAlgoAccelerateCoef = timeOnOneProcessor / twelveAlgoTime.toDouble()
 
-            val thirdAlgoSystemEfficientCoef = thirdAlgoAccelerateCoef / it.first
-            val twelveAlgoSystemEfficientCoef = twelveAlgoAccelerateCoef / it.first
+            val thirdAlgoSystemEfficientCoef = thirdAlgoAccelerateCoef / it.first.toDouble()
+            val twelveAlgoSystemEfficientCoef = twelveAlgoAccelerateCoef / it.first.toDouble()
 
             val criticalPath = MyAlgo3.createQueue(taskData, true).first()
 
-            val thirdAlgoPlanEfficiency = criticalPath / thirdAlgoTime
-            val twelveAlgoPlanEfficiency = criticalPath / twelveAlgoTime
+            val thirdAlgoPlanEfficiency = criticalPath / thirdAlgoTime.toDouble()
+            val twelveAlgoPlanEfficiency = criticalPath / twelveAlgoTime.toDouble()
 
             resultRows.add(
                 ResultRow(
-                    it.first, it.second, "Коефіцієнт прискорення",
-                    "$thirdAlgoAccelerateCoef (3)", "$twelveAlgoAccelerateCoef (12)"
+                    it.first, it.second, "К. пр. ",
+                    "${myRound(thirdAlgoAccelerateCoef)} (3)", "${myRound(twelveAlgoAccelerateCoef)} (12)"
                 )
             )
             resultRows.add(
                 ResultRow(
-                    it.first, it.second, "Кoефіцієнт ефе-ті системи",
-                    "$thirdAlgoSystemEfficientCoef (3)", "$twelveAlgoSystemEfficientCoef (12)"
+                    it.first, it.second, "К. еф. ",
+                    "${myRound(thirdAlgoSystemEfficientCoef)} (3)", "${myRound(twelveAlgoSystemEfficientCoef)} (12)"
                 )
             )
             resultRows.add(
                 ResultRow(
-                    it.first, it.second, "Коефіцієнт ефе-ті алгоритму пл-ння",
-                    "$thirdAlgoPlanEfficiency (3)", "$twelveAlgoPlanEfficiency (12)"
+                    it.first, it.second, "К. еф. пл.",
+                    "${myRound(thirdAlgoPlanEfficiency)} (3)", "${myRound(twelveAlgoPlanEfficiency)} (12)"
                 )
             )
         }
+        ShowStatisticDialog(invoker, "Statistic", resultRows)
     }
 
     fun getAlgoTime(taskData: ReformattedData, algoNumber: Int): Int {
@@ -74,3 +78,9 @@ data class ResultRow(
     val thirdAlgorithmRes: String,
     val twelveAlgorithmRes: String
 )
+
+fun myRound(d: Double): Double {
+    val newDouble = d * 1000
+    val i = round(newDouble)
+    return i / 1000.toDouble()
+}

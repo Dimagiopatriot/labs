@@ -5,6 +5,7 @@ import com.mxgraph.model.mxGraphModel
 import com.mxgraph.view.mxGraph
 import ReformattedData
 import reformattedData
+import java.awt.Component
 import java.util.*
 import kotlin.math.ceil
 import kotlin.math.round
@@ -19,7 +20,8 @@ class GenerateStatistic(
     private val maxVertexWeight: Int,
     private var statisticVertexCount: Int,
     private val taskGraph: mxGraph,
-    private val systemGraph: mxGraph
+    private val systemGraph: mxGraph,
+    private val invoker: Component
 ) {
 
     val graphModels = mutableListOf<Triple<Int, Double, ReformattedData>>()
@@ -31,7 +33,7 @@ class GenerateStatistic(
             vertexCountOnIteration += vertexStep
             statisticVertexCount--
         } while (statisticVertexCount > 0)
-        val calculateStatistic = CalculateStatistic(systemGraph)
+        val calculateStatistic = CalculateStatistic(systemGraph, invoker)
         calculateStatistic.calculate(graphModels)
     }
 
